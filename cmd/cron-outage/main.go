@@ -53,9 +53,13 @@ func main() {
 		scanner := bufio.NewScanner(f)
 		for scanner.Scan() {
 			lines := cron.ParseLine(scanner.Text())
-			if lines != nil && lines.Command != "" {
-				for _, l := range lines.Lines() {
-					fmt.Println(l)
+			if lines != nil {
+				if lines.Command != "" {
+					for _, l := range lines.Lines() {
+						fmt.Println(l)
+					}
+				} else if lines.Comment != "" {
+					fmt.Println(lines.Comment)
 				}
 			}
 		}
