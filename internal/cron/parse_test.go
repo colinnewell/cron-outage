@@ -23,6 +23,7 @@ func TestOutput(t *testing.T) {
 			"day of month  ",
 			"month         ",
 			"day of week   ",
+			"user          ",
 			"command       test",
 		},
 	); diff != "" {
