@@ -14,7 +14,7 @@ install: cron-outage
 
 lint:
 	golangci-lint run
-	gofmt -l -s .
+	./ensure-gofmt.sh
 
 license-check:
 	# gem install license_finder
