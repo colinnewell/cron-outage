@@ -48,12 +48,7 @@ func (l Line) InWindow(start time.Time, end time.Time) bool {
 		return true
 	}
 
-	found = checkRange(start.Minute(), end.Minute(), l.Minute, 60, 0)
-	if !found {
-		return false
-	}
-
-	return true
+	return checkRange(start.Minute(), end.Minute(), l.Minute, 60, 0)
 }
 
 func checkRange(start, end int, valid []int, max int, lowest int) bool {
