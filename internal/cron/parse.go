@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Line struct {
@@ -17,6 +18,52 @@ type Line struct {
 	Command    string
 	Comment    string
 	User       string
+}
+
+func (l Line) InWindow(start time.Time, end time.Time) bool {
+	found := checkRange(int(start.Month()), int(end.Month()), l.Month, 12, 1)
+	if !found {
+		return false
+	}
+
+	// FIXME: take a closer look at the boundaries on this.
+	found = checkRange(start.Day(), end.Day(), l.DayOfMonth, 31, 1)
+	if !found {
+		return false
+	}
+
+	found = checkRange(int(start.Weekday()), int(end.Weekday()), l.DayOfWeek, 7, 0)
+	if !found {
+		return false
+	}
+
+	found = checkRange(start.Hour(), end.Hour(), l.Hour, 24, 0)
+	if !found {
+		return false
+	}
+
+	found = checkRange(start.Minute(), end.Minute(), l.Minute, 60, 0)
+	if !found {
+		return false
+	}
+
+	return true
+}
+
+func checkRange(start, end int, valid []int, max int, lowest int) bool {
+	found := false
+	for m := start; m <= end && !found; m = (m + 1) % max {
+		if m < lowest {
+			m = lowest
+		}
+		for _, om := range valid {
+			if om == int(m) {
+				found = true
+				break
+			}
+		}
+	}
+	return found
 }
 
 func (l Line) Lines() []string {

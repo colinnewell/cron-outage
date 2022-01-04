@@ -52,14 +52,13 @@ func main() {
 		defer f.Close()
 		scanner := bufio.NewScanner(f)
 		for scanner.Scan() {
-			lines := cron.ParseLine(scanner.Text())
+			line := scanner.Text()
+			lines := cron.ParseLine(line)
 			if lines != nil {
 				if lines.Command != "" {
-					for _, l := range lines.Lines() {
-						fmt.Println(l)
+					if lines.InWindow(s, e) {
+						fmt.Println(line)
 					}
-				} else if lines.Comment != "" {
-					fmt.Println(lines.Comment)
 				}
 			}
 		}
