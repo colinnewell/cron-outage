@@ -12,11 +12,13 @@ import (
 
 func main() {
 	var displayVersion bool
-	var start, end, timeFormat string
-	pflag.BoolVar(&displayVersion, "version", false, "Display program version")
+	var start, end, notBefore, timeFormat string
+	// FIXME: don't sort the flags in the help
 	pflag.StringVar(&start, "start", "", "Start of outage")
 	pflag.StringVar(&end, "end", "", "End of outage")
+	pflag.StringVar(&notBefore, "not-before", "", "Also check if it won't run before this time (optional)")
 	pflag.StringVar(&timeFormat, "time-format", "2006-01-02T15:04:05Z", "Time format to parse")
+	pflag.BoolVar(&displayVersion, "version", false, "Display program version")
 	pflag.Parse()
 
 	if displayVersion {
@@ -43,6 +45,17 @@ func main() {
 		return
 	}
 
+	var nb time.Time
+	if notBefore != "" {
+		var err error
+		nb, err = time.Parse(timeFormat, notBefore)
+		if err != nil {
+			fmt.Printf("Error parsing %s: %s\n", e, err)
+			pflag.Usage()
+			return
+		}
+	}
+
 	for _, v := range pflag.Args() {
 		f, err := os.Open(v)
 		if err != nil {
@@ -57,7 +70,9 @@ func main() {
 			if lines != nil {
 				if lines.Command != "" {
 					if lines.InWindow(s, e) {
-						fmt.Println(line)
+						if nb.IsZero() || !lines.InWindow(e, nb) {
+							fmt.Println(line)
+						}
 					}
 				}
 			}
