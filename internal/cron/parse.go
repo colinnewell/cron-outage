@@ -42,6 +42,12 @@ func (l Line) InWindow(start time.Time, end time.Time) bool {
 		return false
 	}
 
+	if end.Sub(start).Hours() >= 1 {
+		// NOTE: could do this trick for greater than a day etc. too.
+		// assume all minutes are good since the duration is > 1 hour
+		return true
+	}
+
 	found = checkRange(start.Minute(), end.Minute(), l.Minute, 60, 0)
 	if !found {
 		return false
