@@ -8,8 +8,6 @@ import (
 )
 
 type Line struct {
-	// FIXME: could add attributes that specify range and heading names
-	// possibly point out validation errors?
 	Minute     []int
 	Hour       []int
 	DayOfMonth []int
