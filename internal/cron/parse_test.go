@@ -75,4 +75,8 @@ func TestInWindow(t *testing.T) {
 	s = time.Date(2020, 11, 17, 4, 3, 58, 0, time.UTC)
 	e = time.Date(2020, 11, 17, 4, 5, 58, 0, time.UTC)
 	assert.True(t, l.InWindow(s, e), "Should be in window")
+
+	s = time.Date(2020, 11, 17, 4, 10, 58, 0, time.UTC)
+	e = time.Date(2020, 11, 17, 6, 34, 58, 0, time.UTC)
+	assert.False(t, l.InWindow(s, e), "Should not be in window")
 }

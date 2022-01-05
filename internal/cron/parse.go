@@ -21,34 +21,44 @@ type Line struct {
 }
 
 func (l Line) InWindow(start time.Time, end time.Time) bool {
-	found := checkRange(int(start.Month()), int(end.Month()), l.Month, 12, 1)
-	if !found {
-		return false
+	mins := map[int]bool{}
+	hours := map[int]bool{}
+	months := map[int]bool{}
+	daysofmonth := map[int]bool{}
+	daysofweek := map[int]bool{}
+	for _, m := range l.Minute {
+		mins[m] = true
+	}
+	for _, m := range l.Hour {
+		hours[m] = true
+	}
+	for _, m := range l.Month {
+		months[m] = true
+	}
+	for _, m := range l.DayOfWeek {
+		daysofweek[m] = true
+	}
+	for _, m := range l.DayOfMonth {
+		daysofmonth[m] = true
 	}
 
-	// FIXME: take a closer look at the boundaries on this.
-	found = checkRange(start.Day(), end.Day(), l.DayOfMonth, 31, 1)
-	if !found {
-		return false
+	for t := start; t.Before(end); t = t.Add(time.Minute) {
+		_, mon, d := t.Date()
+		wd := t.Weekday()
+		hour, min, _ := t.Clock()
+		if _, ok := months[int(mon)]; ok {
+			if _, ok := daysofmonth[d]; ok {
+				if _, ok := daysofweek[int(wd)]; ok {
+					if _, ok := hours[hour]; ok {
+						if _, ok := mins[min]; ok {
+							return true
+						}
+					}
+				}
+			}
+		}
 	}
-
-	found = checkRange(int(start.Weekday()), int(end.Weekday()), l.DayOfWeek, 7, 0)
-	if !found {
-		return false
-	}
-
-	found = checkRange(start.Hour(), end.Hour(), l.Hour, 24, 0)
-	if !found {
-		return false
-	}
-
-	if end.Sub(start).Hours() >= 1 {
-		// NOTE: could do this trick for greater than a day etc. too.
-		// assume all minutes are good since the duration is > 1 hour
-		return true
-	}
-
-	return checkRange(start.Minute(), end.Minute(), l.Minute, 60, 0)
+	return false
 }
 
 func checkRange(start, end int, valid []int, max int, lowest int) bool {
