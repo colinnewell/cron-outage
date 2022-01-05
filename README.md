@@ -14,3 +14,9 @@ or hours since they will get run normally anyway.
 
 There's no point in trying to reschedule a job with a schedule like `* * * * *`
 once things are back up.
+
+Bugs:
+
+The cron file parser is very happy path, and not cognisant of
+all cron formats.  It may get in an infinite loop with bad
+input.
