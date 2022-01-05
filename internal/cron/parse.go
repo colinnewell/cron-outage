@@ -61,22 +61,6 @@ func (l Line) InWindow(start time.Time, end time.Time) bool {
 	return false
 }
 
-func checkRange(start, end int, valid []int, max int, lowest int) bool {
-	found := false
-	for m := start; m <= end && !found; m = (m + 1) % max {
-		if m < lowest {
-			m = lowest
-		}
-		for _, om := range valid {
-			if om == int(m) {
-				found = true
-				break
-			}
-		}
-	}
-	return found
-}
-
 func (l Line) Lines() []string {
 	lines := []string{
 		generateLine("minute", l.Minute),
