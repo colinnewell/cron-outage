@@ -57,26 +57,25 @@ func main() {
 	}
 
 	for _, v := range pflag.Args() {
+		// we aren't trying to constrain the paths so we make use
+		// of what the user gives us as is.
+		//nolint:gosec
 		f, err := os.Open(v)
 		if err != nil {
 			fmt.Printf("Unable to open %s: %s\n", v, err)
 			continue
 		}
+		//nolint:errcheck,gosec
 		defer f.Close()
 		scanner := bufio.NewScanner(f)
 		for scanner.Scan() {
 			line := scanner.Text()
 			lines := cron.ParseLine(line)
-			if lines != nil {
-				if lines.Command != "" {
-					if lines.InWindow(s, e) {
-						if nb.IsZero() || !lines.InWindow(e, nb) {
-							fmt.Println(line)
-						}
-					}
+			if lines != nil && lines.Command != "" && lines.InWindow(s, e) {
+				if nb.IsZero() || !lines.InWindow(e, nb) {
+					fmt.Println(line)
 				}
 			}
 		}
-
 	}
 }

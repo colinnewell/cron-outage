@@ -1,3 +1,4 @@
+// cron package for parsing crontab lines
 package cron
 
 import (
@@ -138,7 +139,6 @@ func ParseLine(line string) *Line {
 			}
 			if i > len(parts) {
 				done = true
-				break
 			}
 		}
 	}
