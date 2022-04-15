@@ -1,0 +1,53 @@
+linters:
+  disable-all: true
+  enable:
+    - asciicheck
+    - bodyclose
+    - deadcode
+    - depguard
+    - dogsled
+    - dupl
+    - errcheck
+    - exportloopref
+      # - funlen
+    - gochecknoglobals
+    - gochecknoinits
+    - gocognit
+    - goconst
+    - gocritic
+      #- gocyclo
+    - godot
+    - goerr113
+    - gofmt
+    - goimports
+    - gomnd
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - misspell
+    - nakedret
+    - nestif
+    - nolintlint
+    - revive
+    - rowserrcheck
+    - staticcheck
+    - structcheck
+    - structcheck
+    - stylecheck
+      #- testpackage
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - varcheck
+    - whitespace
+
+  # come back to this.  might be useful later.
+  # - prealloc
+  # - wsl
+  #
+  # probably not worrying about this.
+  # - godox
