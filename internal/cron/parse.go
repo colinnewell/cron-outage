@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// Line represents a cron line
 type Line struct {
 	Minute     []int
 	Hour       []int
@@ -18,6 +19,7 @@ type Line struct {
 	User       string
 }
 
+// InWindow returns true if the line should fire within the time window specified
 func (l Line) InWindow(start time.Time, end time.Time) bool {
 	mins := map[int]bool{}
 	hours := map[int]bool{}
@@ -59,6 +61,7 @@ func (l Line) InWindow(start time.Time, end time.Time) bool {
 	return false
 }
 
+// Lines returns a list of strings with the info about the line
 func (l Line) Lines() []string {
 	lines := []string{
 		generateLine("minute", l.Minute),
@@ -84,6 +87,7 @@ func generateLine(heading string, numbers []int) string {
 	return sb.String()
 }
 
+// ParseLine parses a crontab line into a Line object
 func ParseLine(line string) *Line {
 	// grab line info.
 	// allow comments
