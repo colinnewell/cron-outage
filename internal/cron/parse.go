@@ -1,4 +1,4 @@
-// cron package for parsing crontab lines
+// Package cron package for parsing crontab lines
 package cron
 
 import (
@@ -47,19 +47,15 @@ func (l Line) InWindow(start time.Time, end time.Time) bool {
 		_, mon, d := t.Date()
 		wd := t.Weekday()
 		hour, min, _ := t.Clock()
-		if _, ok := months[int(mon)]; ok {
-			if _, ok := daysofmonth[d]; ok {
-				if _, ok := daysofweek[int(wd)]; ok {
-					if _, ok := hours[hour]; ok {
-						if _, ok := mins[min]; ok {
-							return true
-						}
-					}
-				}
-			}
-		}
+		return match(months, int(mon)) && match(daysofmonth, d) &&
+			match(daysofweek, int(wd)) && match(hours, hour) && match(mins, min)
 	}
 	return false
+}
+
+func match(r map[int]bool, v int) bool {
+	_, ok := r[v]
+	return ok
 }
 
 // Lines returns a list of strings with the info about the line
