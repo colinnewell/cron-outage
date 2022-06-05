@@ -85,6 +85,8 @@ func generateLine(heading string, numbers []int) string {
 }
 
 // ParseLine parses a crontab line into a Line object
+// Note that this parser isn't particularly well tested, it might get into an
+// infinite loop if it encounters something unexpected.
 //nolint:gocognit
 func ParseLine(line string) *Line {
 	// grab line info.
