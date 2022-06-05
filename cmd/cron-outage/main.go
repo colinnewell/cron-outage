@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/colinnewell/cron-outage/internal/cron"
+	"github.com/colinnewell/cron-outage/pkg/cron"
 	"github.com/spf13/pflag"
 )
 
